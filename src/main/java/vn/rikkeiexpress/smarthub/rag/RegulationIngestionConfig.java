@@ -3,8 +3,7 @@ package vn.rikkeiexpress.smarthub.rag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.reader.markdown.MarkdownDocumentReader;
-import org.springframework.ai.reader.markdown.config.MarkdownDocumentReaderConfig;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.ApplicationRunner;
@@ -20,7 +19,8 @@ public class RegulationIngestionConfig {
 
     private static final Logger log = LoggerFactory.getLogger(RegulationIngestionConfig.class);
 
-    private static final String SOURCE_FILE = "quy-che-van-chuyen-rikkeiexpress.md";
+    // tai lieu quy che chinh thuc dang PDF (ma QC-RKE-2026-01)
+    private static final String SOURCE_FILE = "TaiLieu_QuyCheVanChuyen_RikkeiExpress.pdf";
 
     @Bean
     ApplicationRunner regulationIngestionRunner(VectorStore vectorStore, JdbcTemplate jdbcTemplate) {
@@ -32,14 +32,10 @@ public class RegulationIngestionConfig {
                     return;
                 }
 
-                MarkdownDocumentReaderConfig readerConfig = MarkdownDocumentReaderConfig.builder()
-                        .withHorizontalRuleCreateDocument(true)
-                        .withIncludeBlockquote(true)
-                        .withIncludeCodeBlock(true)
-                        .build();
-                MarkdownDocumentReader reader = new MarkdownDocumentReader(
-                        new ClassPathResource("docs/" + SOURCE_FILE), readerConfig);
-                List<Document> rawDocuments = reader.get();
+                // Tika doc truc tiep file PDF quy che thanh van ban
+                TikaDocumentReader reader = new TikaDocumentReader(
+                        new ClassPathResource("docs/" + SOURCE_FILE));
+                List<Document> rawDocuments = reader.read();
 
                 TokenTextSplitter splitter = TokenTextSplitter.builder()
                         .withChunkSize(512)

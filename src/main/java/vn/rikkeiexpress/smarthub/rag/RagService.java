@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class RagService {
 
-    private static final String SOURCE_FILE = "quy-che-van-chuyen-rikkeiexpress.md";
+    private static final String SOURCE_FILE = "TaiLieu_QuyCheVanChuyen_RikkeiExpress.pdf";
     private static final int TOP_K = 4;
     private static final double SIMILARITY_THRESHOLD = 0.5;
 

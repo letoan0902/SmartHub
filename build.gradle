@@ -33,7 +33,8 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
     implementation 'org.springframework.ai:spring-ai-google-genai-embedding'
     implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
-    implementation 'org.springframework.ai:spring-ai-markdown-document-reader'
+    // Tika de doc tai lieu quy che dang PDF
+    implementation 'org.springframework.ai:spring-ai-tika-document-reader'
     implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
 
     // Phan he 3: MCP server (profile mcp) va MCP client (profile analytics)

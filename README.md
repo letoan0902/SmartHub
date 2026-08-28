@@ -27,7 +27,7 @@ Chạy profile mặc định (cổng 8080):
 ./gradlew bootRun
 ```
 
-Lần chạy đầu, ứng dụng đọc `docs/quy-che-van-chuyen-rikkeiexpress.md`, cắt chunk và nạp vào `vector_store`; các lần sau phát hiện dữ liệu đã có thì bỏ qua. Gọi thử:
+Lần chạy đầu, ứng dụng đọc tài liệu quy chế chính thức `docs/TaiLieu_QuyCheVanChuyen_RikkeiExpress.pdf` (mã QC-RKE-2026-01) qua TikaDocumentReader, cắt chunk và nạp vào `vector_store`; các lần sau phát hiện dữ liệu đã có thì bỏ qua. Nếu trước đó đã nạp một bản tài liệu khác, chạy `TRUNCATE TABLE vector_store;` trên database rồi khởi động lại để nạp bản mới. Gọi thử:
 
 ```
 curl -G "http://localhost:8080/api/v1/rag/ask" --data-urlencode "question=Đơn hàng hỏng có khai giá được bồi thường thế nào"
@@ -125,7 +125,7 @@ SmartHub
         |-- application-analytics.yml    # bat MCP client, spawn jar voi profile mcp
         |-- logback-spring.xml           # toan bo log sang System.err
         |-- data.sql                     # seed 6 don hang mau
-        `-- docs/quy-che-van-chuyen-rikkeiexpress.md
+        `-- docs/TaiLieu_QuyCheVanChuyen_RikkeiExpress.pdf
 ```
 
 ## 5. Ghi chú an toàn
