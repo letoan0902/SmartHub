@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-tika-document-reader'
     implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
 
+    // MCP server doi soat du lieu van hanh (chay voi profile mcp)
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
+
     runtimeOnly 'org.postgresql:postgresql'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

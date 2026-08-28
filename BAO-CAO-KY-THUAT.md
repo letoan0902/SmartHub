@@ -23,6 +23,8 @@ PDF quy che -> TikaDocumentReader -> TokenTextSplitter 512 token
 -> embedding -> vector_store (co buoc dem ban ghi chong nap trung)
 ```
 
+Ngoài API web ở profile mặc định, dự án có thêm cấu hình MCP server ở profile `mcp`: chạy với `--spring.profiles.active=mcp` thì ứng dụng không mở cổng web mà expose ba tool đối soát dữ liệu vận hành (truy vấn SELECT qua lớp chặn `SafeSqlValidator`, thống kê bưu cục, xuất báo cáo Markdown) theo JSON-RPC qua stdio, để một MCP client bên ngoài tự khám phá qua `tools/list`. Vì stdout lúc này là kênh giao thức, banner Spring bị tắt và toàn bộ log được logback đẩy sang stderr nhằm chống stdio pollution.
+
 ## 2. Chiến lược chunking và ngưỡng tương đồng
 
 Tài liệu quy chế có cấu trúc "Điều N" rất đều, mỗi Điều là một đơn vị ngữ nghĩa trọn vẹn (biểu phí, bồi thường, khiếu nại...). Tham số cắt chunk chọn 512 token với ngưỡng tối thiểu 350 ký tự vì hai lý do đối xứng:

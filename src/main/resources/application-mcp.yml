@@ -1,0 +1,12 @@
+spring:
+  main:
+    # MCP server giao tiep JSON-RPC qua stdio, khong mo cong web
+    web-application-type: none
+    # banner in thang ra stdout se lam hong khung JSON-RPC nen phai tat
+    banner-mode: off
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: smarthub-analytics
+        version: 1.0.0
