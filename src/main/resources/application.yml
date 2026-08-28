@@ -1,8 +1,6 @@
 spring:
   application:
     name: smarthub
-  main:
-    banner-mode: "off"
   datasource:
     url: ${SUPABASE_DB_URL:jdbc:postgresql://localhost:5432/smarthub}
     username: ${SUPABASE_DB_USER:postgres}
@@ -10,15 +8,6 @@ spring:
     hikari:
       # pooler Supabase gioi han ket noi, giu pool nho
       maximum-pool-size: 4
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    # bang deliveries/incidents do JPA tao truoc, sau do data.sql moi seed
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
   ai:
     model:
       chat: google-genai
@@ -42,31 +31,6 @@ spring:
         initialize-schema: true
         index-type: HNSW
         distance-type: COSINE_DISTANCE
-    mcp:
-      # profile mac dinh chi chay web app: tat ca server lan client MCP
-      server:
-        enabled: false
-      client:
-        enabled: false
 
 server:
   port: 8080
-
-management:
-  tracing:
-    sampling:
-      # lay 100% trace de quan sat day du tren Langfuse
-      probability: 1.0
-  otlp:
-    tracing:
-      endpoint: ${LANGFUSE_HOST:http://localhost:3000}/api/public/otel/v1/traces
-      headers:
-        Authorization: "Basic ${LANGFUSE_BASIC_AUTH:}"
-
-otel:
-  bsp:
-    # hang doi day thi drop span, khong chan luong nghiep vu
-    max-queue-size: 2048
-    schedule-delay: 5000
-    max-export-batch-size: 512
-    export-timeout: 30000

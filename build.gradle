@@ -26,24 +26,16 @@ ext {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // JdbcTemplate cho buoc chong nap trung vector_store
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-    // Phan he 1 + 2: chat model va RAG
+    // Chat model va RAG
     implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
     implementation 'org.springframework.ai:spring-ai-google-genai-embedding'
     implementation 'org.springframework.ai:spring-ai-starter-vector-store-pgvector'
     // Tika de doc tai lieu quy che dang PDF
     implementation 'org.springframework.ai:spring-ai-tika-document-reader'
     implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
-
-    // Phan he 3: MCP server (profile mcp) va MCP client (profile analytics)
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-server'
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
-
-    // Phan he 4: day trace OTLP sang Langfuse
-    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
-    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
 
     runtimeOnly 'org.postgresql:postgresql'
 
