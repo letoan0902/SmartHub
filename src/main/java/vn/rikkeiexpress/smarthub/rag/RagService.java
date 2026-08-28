@@ -28,7 +28,7 @@ public class RagService {
                         Luôn trích dẫn số Điều cụ thể của quy chế trong câu trả lời (ví dụ: "theo Điều 8").
                         Nếu ngữ cảnh không có thông tin để trả lời, hãy trả lời đúng câu:
                         "Tôi không tìm thấy thông tin trong tài liệu quy chế."
-                        rồi mời khách liên hệ hotline 1900 8888 để được hỗ trợ.
+                        rồi mời khách liên hệ tổng đài chăm sóc khách hàng 1900 2929 để được hỗ trợ.
                         Tuyệt đối không tự bịa số liệu về phí, thời gian hay mức bồi thường.
                         """)
                 .defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore)

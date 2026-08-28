@@ -42,6 +42,24 @@ Tầng system prompt khóa hành vi ba lớp: chỉ trả lời từ ngữ cản
 
 Danh sách nguồn trả về không lấy từ nội bộ advisor mà chạy lại chính phép truy vấn của advisor (cùng topK, cùng ngưỡng, cùng câu hỏi) qua `vectorStore.similaritySearch`. Hai phép truy vấn giống hệt tham số nên kết quả nhất quán, đổi lại không phụ thuộc khóa context nội bộ của advisor giữa các phiên bản thư viện.
 
+### Kết quả đánh giá thực nghiệm
+
+Chạy thật trên Supabase (Session pooler khu vực ap-southeast-2) với tài liệu quy chế chính thức QC-RKE-2026-01: pipeline nạp thành công 8 chunk (512 token, minChunkSizeChars 350). Bộ câu hỏi kiểm chứng được chấm bằng cách đối chiếu trực tiếp với văn bản gốc:
+
+| Câu hỏi kiểm chứng | Đáp án chuẩn theo quy chế | Kết quả | Latency |
+|---|---|---|---|
+| Cước 0,5kg liên tỉnh khác miền | 22.000đ tiêu chuẩn / 35.000đ nhanh (Điều 3 Khoản 3) | Đúng, trích dẫn đúng Điều | 6,1s |
+| Bồi thường khi không khai giá | 4 lần cước, không vượt 1.000.000đ (Điều 8 Khoản 1) | Đúng cả mức trần (câu gài) | 4,4s |
+| Cách tính phụ phí COD | 1,5% giá trị thu hộ, tối thiểu 5.000đ (Điều 4 Khoản 1) | Đúng | 5,1s |
+| Quyền lợi khi giao trễ | Hoàn 100% cước (Điều 6 Khoản 2) | Đúng | 6,2s |
+| Thời hạn gửi và xử lý khiếu nại | 7 ngày; hư hỏng phản hồi trong 3 ngày làm việc (Điều 7, Điều 11) | Đúng | 5,1s |
+| Phí gửi xe máy sang Mỹ (ngoài phạm vi) | Phải từ chối | Trả đúng nguyên văn câu từ chối chuẩn kèm tổng đài 1900 2929 | 5,7s |
+| Chương trình tích điểm (ngoài phạm vi) | Phải từ chối | Trả đúng nguyên văn câu từ chối chuẩn | 4,5s |
+
+Tỉ lệ trả lời đúng nội dung 5/5, trích dẫn đúng Điều 5/5, từ chối đúng với câu ngoài phạm vi 2/2; mọi phản hồi đều kèm 4 đoạn nguồn từ đúng file PDF. Điểm chưa đạt duy nhất là latency: trung bình khoảng 5,3 giây, vượt mức SLA 3 giây của bản đặc tả. Nguyên nhân chính là gemini-3.7-flash thuộc dòng model suy nghĩ nhiều bước cộng với khứ hồi mạng tới hạ tầng model và database ở nước ngoài; hướng cải thiện đã xác định: dùng model bậc nhẹ hơn cho tra cứu thuần, giảm topK từ 4 xuống 3, và rút gọn system prompt.
+
+Phía Agent (chuyên đề 2), ca kiểm chứng dùng đúng câu ví dụ của bản đặc tả "Đơn RK-2026-001 bị ướt sũng hỏng đồ ở kho Hà Nội" cho kết quả trọn chuỗi: bóc đủ 4 thực thể (suy ra CRITICAL từ chi tiết "hàng giá trị cao"), tạo phiếu sự cố OPEN rồi chuyển trạng thái đơn sang DAMAGED, diễn giải lại tự nhiên. Ca phòng thủ với mã đơn không tồn tại RK-9999-888 được từ chối lịch sự kèm hướng dẫn kiểm tra lại, ứng dụng không lỗi. Một quan sát phụ đáng giá cho chuyên đề 4: trong suốt phiên chạy chưa dựng Langfuse, exporter OTel liên tục báo lỗi kết nối localhost:3000 ở luồng nền nhưng không request nghiệp vụ nào bị chậm hay hỏng - minh chứng sống cho thiết kế non-blocking và cơ chế chịu lỗi của Batch Span Processor.
+
 ## 3. Chuyên đề 2: Agent xử lý sự cố
 
 Bài toán lõi của agent là bóc tách 4 thực thể từ một câu nói đời thường: mã vận đơn, loại sự cố, bưu cục, mức độ. Chiến lược đặt toàn bộ ánh xạ từ vựng vào system prompt: "ướt, vỡ, bể, móp" quy về HỎNG_HÓC, "kho Hà Nội" quy về HN-01, "khách đòi bồi thường" đẩy mức độ lên CRITICAL. Cách này tận dụng đúng sở trường của LLM (hiểu biến thể ngôn ngữ) và giữ cho tool chỉ phải làm việc với giá trị chuẩn hóa.

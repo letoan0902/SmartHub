@@ -12,3 +12,5 @@ out/
 bin/
 
 HELP.md
+
+*.log
