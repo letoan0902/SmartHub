@@ -1,0 +1,19 @@
+spring:
+  main:
+    # MCP server giao tiep JSON-RPC qua stdio, khong mo cong web
+    web-application-type: none
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: smarthub-analytics
+        version: 1.0.0
+      client:
+        enabled: false
+
+management:
+  otlp:
+    tracing:
+      export:
+        # process stdio khong export telemetry rieng
+        enabled: false

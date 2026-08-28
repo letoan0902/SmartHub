@@ -1,0 +1,14 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+.env
+reports/
+
+.idea/
+*.iml
+.vscode/
+out/
+bin/
+
+HELP.md
